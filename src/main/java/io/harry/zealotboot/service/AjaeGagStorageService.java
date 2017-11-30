@@ -1,8 +1,9 @@
 package io.harry.zealotboot.service;
 
-public interface AjaeGagStorageService {
-    static final String BUCKET_NAME = "zealot";
-    static fin
+import io.harry.zealotboot.service.exception.ServiceException;
 
-    public
+import java.io.InputStream;
+
+public interface AjaeGagStorageService {
+    void uploadImage(InputStream inputStream, String fileName) throws ServiceException;
 }

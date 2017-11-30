@@ -1,6 +1,7 @@
 package io.harry.zealotboot.repository;
 
 import io.harry.zealotboot.model.AjaeGag;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class AjaeGagRepositoryTest {
     @Autowired
-    MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
 
     @Autowired
-    AjaeGagRepository ajaeGagRepository;
+    private AjaeGagRepository ajaeGagRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -31,10 +32,15 @@ public class AjaeGagRepositoryTest {
         mongoTemplate.save(new AjaeGag("http://overtherainbow"));
     }
 
+    @After
+    public void tearDown() throws Exception {
+        mongoTemplate.dropCollection("ajae_gag");
+    }
+
     @Test
     public void findAll() throws Exception {
         List<String> urlList = ajaeGagRepository.findAll().stream()
-                .map(ajaeGag -> ajaeGag.getUrl())
+                .map(AjaeGag::getUrl)
                 .collect(Collectors.toList());
 
         assertThat(urlList.size()).isEqualTo(2);
