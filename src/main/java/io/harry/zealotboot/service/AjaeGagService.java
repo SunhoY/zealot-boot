@@ -19,4 +19,8 @@ public class AjaeGagService {
     public List<AjaeGag> getAjaeGagList() {
         return ajaeGagRepository.findAll();
     }
+
+    public AjaeGag createAjaeGag(AjaeGag ajaeGag) {
+        return null;
+    }
 }
