@@ -28,8 +28,9 @@ public class AjaeGagRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        mongoTemplate.save(new AjaeGag("http://somewhere"));
-        mongoTemplate.save(new AjaeGag("http://overtherainbow"));
+        mongoTemplate.save(new AjaeGag("http://somewhere", 4444, false));
+        mongoTemplate.save(new AjaeGag("http://overtherainbow", 5555, true));
+        mongoTemplate.save(new AjaeGag("http://overtherainbow", 6666, true));
     }
 
     @After
@@ -43,8 +44,18 @@ public class AjaeGagRepositoryTest {
                 .map(AjaeGag::getUrl)
                 .collect(Collectors.toList());
 
-        assertThat(urlList.size()).isEqualTo(2);
+        assertThat(urlList.size()).isEqualTo(3);
         assertThat(urlList.contains("http://somewhere")).isTrue();
         assertThat(urlList.contains("http://overtherainbow")).isTrue();
+    }
+
+    @Test
+    public void findAllByVerifiedEqualsOrderByCreatedAtDesc() throws Exception {
+        List<Long> createdAtList = ajaeGagRepository
+                .findAllByVerifiedEqualsOrderByCreatedAtDesc(true)
+                .stream().map(AjaeGag::getCreatedAt).collect(Collectors.toList());
+
+        assertThat(createdAtList.get(0)).isEqualTo(6666);
+        assertThat(createdAtList.get(1)).isEqualTo(5555);
     }
 }

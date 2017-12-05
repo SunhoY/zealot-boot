@@ -14,7 +14,17 @@ public class AjaeGag {
     @NonNull
     private String url;
 
+    private long createdAt;
+
+    private boolean verified;
+
     public AjaeGag(String url) {
         this.url = url;
+    }
+
+    public AjaeGag(String url, long createdAt, boolean verified) {
+        this.url = url;
+        this.createdAt = createdAt;
+        this.verified = verified;
     }
 }

@@ -25,8 +25,8 @@ public class AjaeGagController {
 
     @GetMapping
     public @ResponseBody
-    ZealotResponse<List<AjaeGag>> getAjaeGags() {
-        return new ZealotResponse<>(ajaeGagService.getAjaeGagList());
+    ZealotResponse<List<AjaeGag>> getAjaeGags(@RequestParam boolean verified) {
+        return new ZealotResponse<>(ajaeGagService.getAjaeGagList(verified));
     }
 
     @PostMapping

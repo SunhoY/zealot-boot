@@ -13,7 +13,7 @@ import java.io.IOException;
 @Configuration
 public class MockMongoDB {
     private static final String MONGO_DB_URL = "0.0.0.0";
-    private static final String MONGO_DB_NAME = "zealot_test";
+    private static final String MONGO_DB_NAME = "zealot-test";
 
     @Bean
     public MongoTemplate mongoTemplate() throws IOException {
@@ -22,8 +22,7 @@ public class MockMongoDB {
         mongo.setBindIp(MONGO_DB_URL);
 
         MongoClient mongoClient = mongo.getObject();
-        MongoTemplate mongoTemplate = new MongoTemplate(mongoClient, MONGO_DB_NAME);
 
-        return mongoTemplate;
+        return new MongoTemplate(mongoClient, MONGO_DB_NAME);
     }
 }

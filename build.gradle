@@ -28,6 +28,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('com.amazonaws:aws-java-sdk-s3:1.11.224')
+	compile('joda-time:joda-time:2.9.9')
 	compile('org.apache.commons:commons-lang3:3.0')
 
 	compileOnly('org.projectlombok:lombok')

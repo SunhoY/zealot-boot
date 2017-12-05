@@ -2,6 +2,7 @@ package io.harry.zealotboot.service;
 
 import io.harry.zealotboot.model.AjaeGag;
 import io.harry.zealotboot.repository.AjaeGagRepository;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,13 @@ public class AjaeGagService {
         this.ajaeGagRepository = ajaeGagRepository;
     }
 
-    public List<AjaeGag> getAjaeGagList() {
-        return ajaeGagRepository.findAll();
+    public List<AjaeGag> getAjaeGagList(boolean verified) {
+        return ajaeGagRepository.findAllByVerifiedEqualsOrderByCreatedAtDesc(verified);
     }
 
     public AjaeGag createAjaeGag(AjaeGag ajaeGag) {
-        return ajaeGagRepository.save(ajaeGag);
+        AjaeGag saveThis = new AjaeGag(ajaeGag.getUrl(), new DateTime().getMillis(), false);
+
+        return ajaeGagRepository.save(saveThis);
     }
 }

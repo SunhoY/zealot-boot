@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -61,7 +60,8 @@ public class AjaeGagControllerTest {
 
         when(mockUrl.toString()).thenReturn(FAKE_URL_STRING);
 
-        when(mockAjaeGagService.getAjaeGagList()).thenReturn(Arrays.asList(new AjaeGag(), new AjaeGag()));
+        when(mockAjaeGagService.getAjaeGagList(false)).thenReturn(Arrays.asList(new AjaeGag(), new AjaeGag()));
+        when(mockAjaeGagService.getAjaeGagList(true)).thenReturn(Arrays.asList(new AjaeGag()));
         when(mockAjaeStorageService.uploadImage(any(InputStream.class)))
                 .thenReturn(mockUrl);
     }
@@ -73,19 +73,19 @@ public class AjaeGagControllerTest {
     }
 
     @Test
-    public void getAjaeGags_callsAjaeService_toFetchAllAjaeGags() throws Exception {
-        result = mockMvc.perform(get("/ajae-gags"));
+    public void getAjaeGags_callsAjaeServiceWithVerifiedField_toFetchAllAjaeGags() throws Exception {
+        result = getAjaeGags("false");
 
-        verify(mockAjaeGagService, times(1)).getAjaeGagList();
+        verify(mockAjaeGagService, times(1)).getAjaeGagList(false);
     }
 
     @Test
     public void getAjaeGags_returnsListOfAjaeGags() throws Exception {
-        result = mockMvc.perform(get("/ajae-gags"));
+        result = getAjaeGags("true");
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").isArray())
-                .andExpect(jsonPath("$.data.length()").value(2));
+                .andExpect(jsonPath("$.data.length()").value(1));
     }
 
     @Test
@@ -132,5 +132,9 @@ public class AjaeGagControllerTest {
         FileInputStream stream = new FileInputStream(file);
 
         return new MockMultipartFile("file", file.getName(), "multipart/form-data", stream);
+    }
+
+    private ResultActions getAjaeGags(String verified) throws Exception {
+        return mockMvc.perform(get("/ajae-gags").param("verified", verified));
     }
 }
