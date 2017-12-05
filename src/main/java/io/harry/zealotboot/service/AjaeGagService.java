@@ -21,6 +21,6 @@ public class AjaeGagService {
     }
 
     public AjaeGag createAjaeGag(AjaeGag ajaeGag) {
-        return null;
+        return ajaeGagRepository.save(ajaeGag);
     }
 }

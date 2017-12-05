@@ -8,10 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -20,10 +19,8 @@ import static org.mockito.Mockito.*;
 public class AjaeGagServiceTest {
     private AjaeGagService subject;
 
-    private List<AjaeGag> ajaeGagList;
-
     @Mock
-    AjaeGagRepository mockAjaeGagRepository;
+    private AjaeGagRepository mockAjaeGagRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -32,8 +29,6 @@ public class AjaeGagServiceTest {
         when(mockAjaeGagRepository.findAll()).thenReturn(Arrays.asList(new AjaeGag(), new AjaeGag()));
 
         subject = new AjaeGagService(mockAjaeGagRepository);
-
-        ajaeGagList = subject.getAjaeGagList();
     }
 
     @After
@@ -43,11 +38,27 @@ public class AjaeGagServiceTest {
 
     @Test
     public void getAjaeGagList_callsAjaeGagRepository_getAjaeGagList() throws Exception {
+        subject.getAjaeGagList();
+
         verify(mockAjaeGagRepository, times(1)).findAll();
     }
 
     @Test
     public void getAjaeGagList_returnsObjectGotFromFindAll() throws Exception {
-        assertThat(ajaeGagList).isEqualTo(Arrays.asList(new AjaeGag(), new AjaeGag()));
+        assertThat(subject.getAjaeGagList()).isEqualTo(Arrays.asList(new AjaeGag(), new AjaeGag()));
+    }
+
+    @Test
+    public void createAjaeGag_storeAjaeGagInRepository() throws Exception {
+        subject.createAjaeGag(new AjaeGag("some url"));
+
+        verify(mockAjaeGagRepository).save(new AjaeGag("some url"));
+    }
+
+    @Test
+    public void createAjaeGag_returnsCreatedAjaeGag() throws Exception {
+        when(mockAjaeGagRepository.save(any(AjaeGag.class))).thenReturn(new AjaeGag("result"));
+
+        assertThat(subject.createAjaeGag(new AjaeGag("some url"))).isEqualTo(new AjaeGag("result"));
     }
 }
